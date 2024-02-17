@@ -73,7 +73,7 @@ def login(request):
             print(">>>>>>>>>>>> login successfully >>>>>>>>>>>>>>>>>...")
             msg = "Login successfully"
             messages.success(request,msg)
-            return redirect('shop')  
+            return redirect('index')  
         except: 
             msg="Your email or password is not match !!!!"
             messages.error(request,msg)
@@ -89,7 +89,7 @@ def logout(request):
     print(">>>>>>>>>>>>>>>>>>>>>>>>LOGOUT")
     msg="Logout successfully"
     messages.success(request,msg)
-    return redirect('index')
+    return redirect('login')
 
 
 def change_password(request):

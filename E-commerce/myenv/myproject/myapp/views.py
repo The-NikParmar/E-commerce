@@ -136,16 +136,17 @@ def mymail(subject, template, to, context, otp):
 def fpassword(request):
     if request.method == 'POST':
         try:
-            user = User.objects.get(uemail=request.POST['uemail'])
+            user = User.objects.get(uemail=request.POST['uemail1'])
             otp = random.randint(1000, 9999)
-            print(otp)
             subject = "OTP for Password Reset"
             template = "etemplate"
             to = user.uemail
             context = {'user': user.uname}
-            mymail(subject, template, to, context, otp)
+            print(otp)
+            mymail(subject,template,to,context,otp)
             print("otp sent successfully")
             request.session['otp']=otp
+            request.session['uemail']=user.uemail
             return render(request, "otp.html", {'uemail':user.uemail,'otp':str(otp)})
         except User.DoesNotExist:
             pass
@@ -155,11 +156,12 @@ def fpassword(request):
 def otp(request):
     if request.method == 'POST':
         try:
-            otp=request.session['otp']
+            otp=int(request.session['otp'])
             uotp = int(request.POST['uotp'])
 
             if otp == uotp:
-                # OTP is correct, redirect to reset password page
+                # OTP is correct, redirect to reset password page4
+                del request.session['otp']
                 return redirect('reset_password')
             else:
                 msg1 = "OTP Doesn't Matched !!!"
@@ -173,9 +175,9 @@ def otp(request):
     
 
 def reset_password(request):
-    user = User.objects.get(uemail=request.POST['uemail'])
+    user = User.objects.get(uemail=request.session['uemail'])
     if request.POST:
-        if request.POST['npassword']==request.POST['cnpassword']:
+        if request.POST['npassword']==request.POST['ncpassword']:
             user.upassword = request.POST['npassword']
             user.save()
             return render(request,'login.html')
@@ -183,6 +185,11 @@ def reset_password(request):
             print("new password and conifrm password dose not match ")
     else:
         return render(request,"reset_password.html")
+
+
+
+def updateprofile(request):
+    return  render(request, "updateprofile.html")
 
 
     

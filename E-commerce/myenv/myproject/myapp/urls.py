@@ -34,4 +34,6 @@ urlpatterns = [
     path('fpassword', views.fpassword, name='fpassword'),
     path('otp', views.otp, name='otp'),
     path('reset_password', views.reset_password, name='reset_password'),
+    path('updateprofile', views.updateprofile, name='updateprofile'),
+    
 ]
